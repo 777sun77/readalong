@@ -1,0 +1,38 @@
+import puppeteer from "puppeteer-core";
+import fs from "node:fs";
+const dir = fs.mkdtempSync("/tmp/ra-rec-");
+const b = await puppeteer.launch({ executablePath: "/usr/bin/google-chrome", headless: true, userDataDir: dir, args: ["--no-sandbox", "--disable-gpu"] });
+const p = await b.newPage(); await p.setViewport({ width: 1280, height: 800 });
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+await p.goto("http://127.0.0.1:8822/", { waitUntil: "networkidle0" });
+await p.evaluate(() => localStorage.clear()); await p.reload({ waitUntil: "networkidle0" });
+const cap = (t) => p.evaluate((t) => { let c = document.getElementById("cap"); if (!c) { c = document.createElement("div"); c.id = "cap"; c.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);width:max-content;max-width:1100px;background:rgba(10,10,14,.9);color:#fff;font:600 22px/1.35 system-ui;padding:12px 20px;border-radius:12px;z-index:99;text-align:center;letter-spacing:normal;word-spacing:normal"; document.body.append(c); } c.textContent = t; }, t);
+const scroll = (sel) => p.evaluate((s) => document.querySelector(s).scrollIntoView({ block: "start" }), sel);
+// Fake word highlight for the video (headless Chrome has no TTS voice).
+const fakeRead = (n) => p.evaluate(async (n) => { const li = document.querySelector(`#lines li[data-n="${n}"]`); for (const s of li.querySelectorAll("span.w0")) { const m = document.createElement("mark"); m.className = "w"; s.replaceWith(m); m.append(s); await new Promise((r) => setTimeout(r, 330)); m.replaceWith(s); } }, n);
+const rec = await p.screencast({ path: "docs/demo.webm" });
+await cap("Meet a 7th grader with dyslexia. Homework: this one paragraph."); await wait(4000);
+await cap("Three sentences, about 32 words each. Reading grade 16: a college level wall of text."); await wait(4500);
+await scroll("#reader");
+await cap("ReadAlong breaks it at natural pauses into short lines: grade 5.9."); await wait(4500);
+await cap("Read aloud follows along word by word, at the speed you choose (Space)."); await fakeRead(0); await fakeRead(1); await wait(500);
+await p.keyboard.press("j"); await p.keyboard.press("j");
+await cap("J / K move line by line. Tricky words are underlined: click to hear them."); await fakeRead(2); await wait(1500);
+await scroll("#h-words");
+await cap("Word help: sound chunks plus a plain meaning a 12-year-old understands."); await wait(5000);
+await scroll("#h-quiz");
+await cap("Quick check: 3 fill-the-gap questions built from the passage. Keys 1-3."); await wait(2500);
+await p.keyboard.press("1"); await wait(1200); await p.keyboard.press("2"); await wait(1200); await p.keyboard.press("3"); await wait(1500);
+await cap("Instant feedback, and the right answer is always shown."); await wait(3500);
+await scroll("#h-set"); await wait(300);
+for (const k of ["large", "spacing", "cream", "focus"]) { await p.click(`[data-pref=${k}]`); await wait(600); }
+await scroll("#reader");
+await cap("Larger text, wide spacing, cream paper, one line at a time. Settings are remembered."); await wait(5000);
+await p.click("[data-pref=focus]"); await p.click("[data-pref=cream]"); await p.click("[data-pref=contrast]"); await wait(300);
+await cap("High contrast for low vision. Every control works from the keyboard."); await wait(4000);
+await p.click("[data-pref=contrast]"); await p.click("[data-pref=large]"); await p.click("[data-pref=spacing]");
+await p.evaluate(() => window.scrollTo(0, 0));
+await p.select("#sample", "own"); await p.type("#src", "Mitochondria are organelles that produce energy for the cell, which needs a constant supply in order to survive, grow and divide.", { delay: 12 });
+await cap("Paste any text from class. Under 25 KB, works offline, nothing is uploaded."); await p.click("#go"); await wait(4500);
+await cap("ReadAlong: one short line at a time, so the wall of text becomes a path."); await wait(3500);
+await rec.stop(); await b.close();

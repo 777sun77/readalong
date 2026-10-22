@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReadAlong: textbook reading without the wall of text</title>
+<meta name="description" content="Turns a dense textbook paragraph into short lines, read aloud with word highlighting, plain-language word help and a quick practice check. Works offline.">
+<link rel="icon" href="data:,">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<a class="skip" href="#reader">Skip to reader</a>
+<header>
+  <h1>ReadAlong</h1>
+  <p class="tag">Textbook reading, one short line at a time. Read aloud, word help, quick practice. No account, works offline.</p>
+</header>
+<main>
+  <section aria-labelledby="h-src" class="card">
+    <h2 id="h-src">1. Pick or paste a passage</h2>
+    <label for="sample">Sample passage</label>
+    <select id="sample"></select>
+    <label for="src">Or paste your own text</label>
+    <textarea id="src" rows="6"></textarea>
+    <div class="row">
+      <button id="go" class="primary">Make it readable <kbd>Enter</kbd></button>
+      <span id="before" class="meter" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-read" class="card" id="reader" tabindex="-1">
+    <h2 id="h-read">2. Read along</h2>
+    <div class="row controls" role="toolbar" aria-label="Reading controls">
+      <button id="prev" aria-label="Previous line">◀ <kbd>K</kbd></button>
+      <button id="play" aria-label="Read aloud">▶ Read aloud <kbd>Space</kbd></button>
+      <button id="next" aria-label="Next line">▶ <kbd>J</kbd></button>
+      <label class="inline">Speed <input id="rate" type="range" min="0.6" max="1.3" step="0.1" value="0.9" aria-label="Reading speed"></label>
+      <span id="after" class="meter" aria-live="polite"></span>
+    </div>
+    <ol id="lines" aria-label="Passage in short lines"></ol>
+    <p id="pos" class="muted" aria-live="polite"></p>
+  </section>
+
+  <section aria-labelledby="h-words" class="card">
+    <h2 id="h-words">3. Word help</h2>
+    <p class="muted">Long or tricky words, split into sound chunks, with a plain meaning. Click one to hear it.</p>
+    <ul id="hard" class="chips"></ul>
+  </section>
+
+  <section aria-labelledby="h-quiz" class="card">
+    <h2 id="h-quiz">4. Quick check</h2>
+    <p class="muted">Fill the gap. Answers use 1, 2, 3 keys too.</p>
+    <div id="quiz"></div>
+    <p id="score" aria-live="polite"></p>
+  </section>
+
+  <section aria-labelledby="h-set" class="card">
+    <h2 id="h-set">Reading settings</h2>
+    <div class="row prefs">
+      <button data-pref="large" aria-pressed="false">Larger text</button>
+      <button data-pref="spacing" aria-pressed="false">Wide spacing</button>
+      <button data-pref="contrast" aria-pressed="false">High contrast</button>
+      <button data-pref="cream" aria-pressed="false">Cream paper</button>
+      <button data-pref="focus" aria-pressed="false">Show one line only</button>
+    </div>
+  </section>
+</main>
+<footer><p>Your text stays in this browser. Nothing is uploaded. Read-aloud uses your device's built-in voice.</p></footer>
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+// Synthetic sample passages written for this project (no real student data).
+export const PASSAGES = [
+  { id: "photo", title: "Science: Photosynthesis (grade 7)", text:
+`Photosynthesis is the process by which green plants, using the energy of sunlight that is captured by chlorophyll in their leaves, convert carbon dioxide from the atmosphere and water absorbed through their roots into glucose, which the plant uses for energy and growth, while oxygen is released into the air as a by-product. Gases move in and out of the leaf through tiny openings called stomata, which open and close depending on the temperature and the amount of water available. Without photosynthesis, organisms that depend on plants for food and oxygen, including humans, could not survive.` },
+  { id: "water", title: "Earth science: The water cycle (grade 6)", text:
+`The water cycle describes how water is continuously distributed around the Earth, moving between the oceans, the atmosphere and the land. Evaporation occurs when the sun heats water in oceans, lakes and rivers, turning it into vapor that rises into the atmosphere, where it cools and undergoes condensation to form clouds. When the droplets in clouds become heavy enough, precipitation falls back to the surface as rain, snow or hail, and the cycle begins again.` },
+  { id: "gov", title: "Civics: Separation of powers (grade 8)", text:
+`In many democracies, the constitution divides the government into three branches so that no single group holds all of the power. The legislative branch, made up of elected representatives, is responsible for writing and passing laws, while the executive branch, led by a president or prime minister, carries those laws out. The judicial branch, which includes the courts, decides what the laws mean and whether they have been broken, and this separation of powers is considered essential for protecting the rights of citizens.` },
+];
